@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Eyüp Aygar Eğitim Platformu</title>
+
   <style>
     body {
       margin: 0;
@@ -50,6 +51,36 @@
       font-size: 18px;
       color: #555;
     }
+
+    .section {
+      padding: 40px 30px;
+    }
+
+    .cards {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      width: 200px;
+      border-radius: 10px;
+    }
+
+    form input, form textarea, form select {
+      width: 250px;
+      padding: 6px;
+    }
+
+    button {
+      padding: 8px 15px;
+      background: #0b3c5d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
   </style>
 </head>
 
@@ -59,50 +90,47 @@
   <h1>Eyüp Aygar Eğitim</h1>
   <nav>
     <a href="#">Ana Sayfa</a>
-    <a href="#">Hakkımızda</a>
-    <a href="#">Dersler</a>
-    <a href="#">İletişim</a>
+    <a href="#hakkimizda">Hakkımızda</a>
+    <a href="#dersler">Dersler</a>
+    <a href="#iletisim">İletişim</a>
   </nav>
 </header>
 
 <section class="hero">
   <h2>Geleceğin Eğitimi Burada</h2>
-  <p>Öğrenciler ve öğretmenler için modern, erişilebilir bir eğitim platformu.</p>
+  <p>Akran öğrenmesiyle desteklenen dijital eğitim platformu</p>
 </section>
 
-<section style="padding:40px 30px;">
+<section id="dersler" class="section">
   <h2>Ders İçerikleri</h2>
-  <p>Öğretmenlerimiz ve öğrencilerimiz tarafından hazırlanan içerikler</p>
+  <p>Öğretmenler ve öğrenciler tarafından hazırlanan içerikler</p>
 
-  <div style="display:flex; gap:20px; flex-wrap:wrap;">
-    <div style="background:white; padding:20px; width:200px; border-radius:10px;">
+  <div class="cards">
+    <div class="card">
       <h3>📘 Matematik</h3>
       <p>Konu anlatımı ve testler</p>
     </div>
-
-    <div style="background:white; padding:20px; width:200px; border-radius:10px;">
+    <div class="card">
       <h3>📗 Fizik</h3>
       <p>Video dersler ve örnekler</p>
     </div>
-
-    <div style="background:white; padding:20px; width:200px; border-radius:10px;">
+    <div class="card">
       <h3>📙 Kimya</h3>
       <p>Konu özetleri ve deneyler</p>
     </div>
-
-    <div style="background:white; padding:20px; width:200px; border-radius:10px;">
+    <div class="card">
       <h3>📕 Biyoloji</h3>
       <p>Şemalar ve akıllı notlar</p>
     </div>
   </div>
 </section>
 
-<section style="padding:40px 30px; background:#eef2f5;">
+<section class="section" style="background:#eef2f5;">
   <h2>Öğretmen Paneli (Demo)</h2>
-  <p>Bu alan öğretmenlerin ders içerikleri yüklemesi için tasarlanmıştır.</p>
+  <p>Öğretmenlerin ders içerikleri yükleyebileceği alan</p>
 
   <form>
-    <label>Ders Seç:</label><br>
+    <label>Ders:</label><br>
     <select>
       <option>Matematik</option>
       <option>Fizik</option>
@@ -111,7 +139,7 @@
     </select><br><br>
 
     <label>Video Başlığı:</label><br>
-    <input type="text" placeholder="Örn: Türev Konu Anlatımı"><br><br>
+    <input type="text"><br><br>
 
     <label>Video Yükle:</label><br>
     <input type="file"><br><br>
@@ -120,9 +148,9 @@
   </form>
 </section>
 
-<section style="padding:40px 30px;">
+<section class="section">
   <h2>Öğrenci Not Paylaşımı</h2>
-  <p>Öğrenciler zorlandıkları konularda notlarını paylaşarak birbirlerine destek olur.</p>
+  <p>Akran öğrenmesini destekleyen ortak not havuzu</p>
 
   <form>
     <label>Ders:</label><br>
@@ -134,13 +162,27 @@
     </select><br><br>
 
     <label>Not Başlığı:</label><br>
-    <input type="text" placeholder="Örn: Limit Özeti"><br><br>
+    <input type="text"><br><br>
 
-    <label>Not Açıklaması:</label><br>
+    <label>Açıklama:</label><br>
     <textarea rows="4"></textarea><br><br>
 
     <button type="button">Paylaş</button>
   </form>
+</section>
+
+<section id="hakkimizda" class="section" style="background:white;">
+  <h2>Hakkımızda</h2>
+  <p>
+    Bu platform, Eyüp Aygar Fen Lisesi öğrencilerinin ve öğretmenlerinin
+    iş birliğiyle, akran öğrenmesini merkeze alan dijital bir eğitim
+    ortamı oluşturmak amacıyla geliştirilmiştir.
+  </p>
+</section>
+
+<section id="iletisim" class="section">
+  <h2>İletişim</h2>
+  <p>Eyüp Aygar Fen Lisesi – Eğitim Girişimi</p>
 </section>
 
 </body>
