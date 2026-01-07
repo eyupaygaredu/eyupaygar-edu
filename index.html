@@ -7,14 +7,15 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", Arial, sans-serif;
       background-color: #f4f6f8;
+      color: #333;
     }
 
     header {
       background-color: #0b3c5d;
       color: white;
-      padding: 15px 30px;
+      padding: 15px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -29,7 +30,7 @@
       color: white;
       margin-left: 20px;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
     }
 
     nav a:hover {
@@ -37,49 +38,91 @@
     }
 
     .hero {
-      padding: 60px 30px;
+      padding: 70px 30px;
       text-align: center;
-      background-color: white;
+      background: linear-gradient(to right, #ffffff, #eef2f5);
     }
 
     .hero h2 {
-      font-size: 32px;
-      margin-bottom: 10px;
+      font-size: 36px;
+      margin-bottom: 15px;
     }
 
     .hero p {
       font-size: 18px;
       color: #555;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .role-buttons {
+      margin-top: 30px;
+    }
+
+    .role-buttons button {
+      margin: 10px;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .teacher-btn {
+      background-color: #0b3c5d;
+      color: white;
+    }
+
+    .student-btn {
+      background-color: #1e88e5;
+      color: white;
     }
 
     .section {
-      padding: 40px 30px;
+      padding: 50px 40px;
     }
 
     .cards {
       display: flex;
-      gap: 20px;
+      gap: 25px;
       flex-wrap: wrap;
+      margin-top: 20px;
     }
 
     .card {
       background: white;
-      padding: 20px;
-      width: 200px;
-      border-radius: 10px;
+      padding: 25px;
+      width: 220px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      margin-top: 0;
     }
 
     form input, form textarea, form select {
-      width: 250px;
-      padding: 6px;
+      width: 260px;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
 
-    button {
-      padding: 8px 15px;
+    form button {
+      padding: 10px 18px;
       background: #0b3c5d;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    footer {
+      background: #0b3c5d;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
     }
   </style>
 </head>
@@ -90,37 +133,45 @@
   <h1>Eyüp Aygar Eğitim</h1>
   <nav>
     <a href="#">Ana Sayfa</a>
-    <a href="#hakkimizda">Hakkımızda</a>
     <a href="#dersler">Dersler</a>
+    <a href="#hakkimizda">Hakkımızda</a>
     <a href="#iletisim">İletişim</a>
   </nav>
 </header>
 
 <section class="hero">
-  <h2>Geleceğin Eğitimi Burada</h2>
-  <p>Akran öğrenmesiyle desteklenen dijital eğitim platformu</p>
+  <h2>Akran Öğrenmesiyle Daha Güçlü Eğitim</h2>
+  <p>
+    Fen lisesi öğrencileri için öğretmen destekli, öğrenci merkezli
+    dijital öğrenme platformu
+  </p>
+
+  <div class="role-buttons">
+    <button class="teacher-btn">Öğretmen Girişi</button>
+    <button class="student-btn">Öğrenci Girişi</button>
+  </div>
 </section>
 
 <section id="dersler" class="section">
   <h2>Ders İçerikleri</h2>
-  <p>Öğretmenler ve öğrenciler tarafından hazırlanan içerikler</p>
+  <p>Video dersler, özetler ve testler</p>
 
   <div class="cards">
     <div class="card">
       <h3>📘 Matematik</h3>
-      <p>Konu anlatımı ve testler</p>
+      <p>Konu anlatımı & testler</p>
     </div>
     <div class="card">
       <h3>📗 Fizik</h3>
-      <p>Video dersler ve örnekler</p>
+      <p>Video dersler</p>
     </div>
     <div class="card">
       <h3>📙 Kimya</h3>
-      <p>Konu özetleri ve deneyler</p>
+      <p>Konu özetleri</p>
     </div>
     <div class="card">
       <h3>📕 Biyoloji</h3>
-      <p>Şemalar ve akıllı notlar</p>
+      <p>Şemalar & notlar</p>
     </div>
   </div>
 </section>
@@ -174,9 +225,9 @@
 <section id="hakkimizda" class="section" style="background:white;">
   <h2>Hakkımızda</h2>
   <p>
-    Bu platform, Eyüp Aygar Fen Lisesi öğrencilerinin ve öğretmenlerinin
-    iş birliğiyle, akran öğrenmesini merkeze alan dijital bir eğitim
-    ortamı oluşturmak amacıyla geliştirilmiştir.
+    Bu platform, Eyüp Aygar Fen Lisesi öğrencilerinin akran öğrenmesiyle
+    birbirlerini desteklediği, öğretmen içerikleriyle güvenilirliği
+    sağlanan dijital bir eğitim girişimidir.
   </p>
 </section>
 
@@ -184,6 +235,10 @@
   <h2>İletişim</h2>
   <p>Eyüp Aygar Fen Lisesi – Eğitim Girişimi</p>
 </section>
+
+<footer>
+  © 2026 Eyüp Aygar Eğitim Platformu
+</footer>
 
 </body>
 </html>
