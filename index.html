@@ -21,11 +21,6 @@
       align-items: center;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 22px;
-    }
-
     nav a {
       color: white;
       margin-left: 20px;
@@ -33,30 +28,10 @@
       font-weight: 600;
     }
 
-    nav a:hover {
-      text-decoration: underline;
-    }
-
     .hero {
       padding: 70px 30px;
       text-align: center;
       background: linear-gradient(to right, #ffffff, #eef2f5);
-    }
-
-    .hero h2 {
-      font-size: 36px;
-      margin-bottom: 15px;
-    }
-
-    .hero p {
-      font-size: 18px;
-      color: #555;
-      max-width: 700px;
-      margin: auto;
-    }
-
-    .role-buttons {
-      margin-top: 30px;
     }
 
     .role-buttons button {
@@ -66,27 +41,21 @@
       border-radius: 25px;
       border: none;
       cursor: pointer;
-    }
-
-    .teacher-btn {
-      background-color: #0b3c5d;
       color: white;
     }
 
-    .student-btn {
-      background-color: #1e88e5;
-      color: white;
-    }
+    .teacher-btn { background-color: #0b3c5d; }
+    .student-btn { background-color: #1e88e5; }
 
     .section {
       padding: 50px 40px;
+      display: none;
     }
 
     .cards {
       display: flex;
       gap: 25px;
       flex-wrap: wrap;
-      margin-top: 20px;
     }
 
     .card {
@@ -95,10 +64,6 @@
       width: 220px;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    }
-
-    .card h3 {
-      margin-top: 0;
     }
 
     form input, form textarea, form select {
@@ -132,53 +97,22 @@
 <header>
   <h1>Eyüp Aygar Eğitim</h1>
   <nav>
-    <a href="#">Ana Sayfa</a>
-    <a href="#dersler">Dersler</a>
-    <a href="#hakkimizda">Hakkımızda</a>
-    <a href="#iletisim">İletişim</a>
+    <a href="#" onclick="showHome()">Ana Sayfa</a>
   </nav>
 </header>
 
-<section class="hero">
+<section class="hero" id="home">
   <h2>Akran Öğrenmesiyle Daha Güçlü Eğitim</h2>
-  <p>
-    Fen lisesi öğrencileri için öğretmen destekli, öğrenci merkezli
-    dijital öğrenme platformu
-  </p>
+  <p>Öğrenci merkezli, öğretmen destekli dijital platform</p>
 
   <div class="role-buttons">
-    <button class="teacher-btn">Öğretmen Girişi</button>
-    <button class="student-btn">Öğrenci Girişi</button>
+    <button class="teacher-btn" onclick="showTeacher()">Öğretmen Girişi</button>
+    <button class="student-btn" onclick="showStudent()">Öğrenci Girişi</button>
   </div>
 </section>
 
-<section id="dersler" class="section">
-  <h2>Ders İçerikleri</h2>
-  <p>Video dersler, özetler ve testler</p>
-
-  <div class="cards">
-    <div class="card">
-      <h3>📘 Matematik</h3>
-      <p>Konu anlatımı & testler</p>
-    </div>
-    <div class="card">
-      <h3>📗 Fizik</h3>
-      <p>Video dersler</p>
-    </div>
-    <div class="card">
-      <h3>📙 Kimya</h3>
-      <p>Konu özetleri</p>
-    </div>
-    <div class="card">
-      <h3>📕 Biyoloji</h3>
-      <p>Şemalar & notlar</p>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="background:#eef2f5;">
+<section id="teacherPanel" class="section" style="background:#eef2f5;">
   <h2>Öğretmen Paneli (Demo)</h2>
-  <p>Öğretmenlerin ders içerikleri yükleyebileceği alan</p>
 
   <form>
     <label>Ders:</label><br>
@@ -199,9 +133,8 @@
   </form>
 </section>
 
-<section class="section">
-  <h2>Öğrenci Not Paylaşımı</h2>
-  <p>Akran öğrenmesini destekleyen ortak not havuzu</p>
+<section id="studentPanel" class="section">
+  <h2>Öğrenci Paneli</h2>
 
   <form>
     <label>Ders:</label><br>
@@ -222,23 +155,34 @@
   </form>
 </section>
 
-<section id="hakkimizda" class="section" style="background:white;">
-  <h2>Hakkımızda</h2>
-  <p>
-    Bu platform, Eyüp Aygar Fen Lisesi öğrencilerinin akran öğrenmesiyle
-    birbirlerini desteklediği, öğretmen içerikleriyle güvenilirliği
-    sağlanan dijital bir eğitim girişimidir.
-  </p>
-</section>
-
-<section id="iletisim" class="section">
-  <h2>İletişim</h2>
-  <p>Eyüp Aygar Fen Lisesi – Eğitim Girişimi</p>
-</section>
-
 <footer>
   © 2026 Eyüp Aygar Eğitim Platformu
 </footer>
 
+<script>
+  function hideAll() {
+    document.getElementById("teacherPanel").style.display = "none";
+    document.getElementById("studentPanel").style.display = "none";
+  }
+
+  function showTeacher() {
+    hideAll();
+    document.getElementById("teacherPanel").style.display = "block";
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function showStudent() {
+    hideAll();
+    document.getElementById("studentPanel").style.display = "block";
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function showHome() {
+    hideAll();
+    window.scrollTo(0, 0);
+  }
+</script>
+
 </body>
 </html>
+
