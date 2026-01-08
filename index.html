@@ -2,57 +2,108 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Eyüp Aygar Eğitim Platformu</title>
 
 <style>
+:root{
+  --primary:#0b3c5d;
+  --secondary:#1e88e5;
+  --bg:#f4f6f8;
+}
+
 body{
   margin:0;
-  font-family:Segoe UI, Arial, sans-serif;
-  background:#f4f6f8;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background:var(--bg);
 }
+
 header{
-  background:#0b3c5d;
+  background:var(--primary);
   color:white;
   padding:15px 40px;
   display:flex;
   justify-content:space-between;
+  align-items:center;
 }
-button{
-  padding:10px 20px;
+
+header h1{margin:0;font-size:22px;}
+
+nav button{
+  background:white;
+  color:var(--primary);
   border:none;
+  padding:8px 16px;
   border-radius:20px;
   cursor:pointer;
+  font-weight:600;
 }
+
+section{display:none;padding:60px 40px;}
+.active{display:block;}
+
 .hero{
-  padding:70px;
   text-align:center;
 }
-.teacher{background:#0b3c5d;color:white;}
-.student{background:#1e88e5;color:white;}
-.section{display:none;padding:40px;}
-.card{
-  background:white;
-  width:200px;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+
+.hero h2{font-size:36px;}
+.hero p{color:#555;font-size:18px;}
+
+.btn{
+  padding:12px 24px;
+  border:none;
+  border-radius:25px;
   cursor:pointer;
+  font-size:16px;
+  margin:10px;
 }
+
+.teacher{background:var(--primary);color:white;}
+.student{background:var(--secondary);color:white;}
+
+.panel-title{
+  font-size:28px;
+  margin-bottom:30px;
+}
+
 .cards{
   display:flex;
   gap:20px;
   flex-wrap:wrap;
 }
-input,select,textarea{
-  width:250px;
-  padding:8px;
-  margin-bottom:10px;
+
+.card{
+  background:white;
+  width:220px;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.1);
+  cursor:pointer;
+  transition:0.3s;
 }
+
+.card:hover{
+  transform:translateY(-6px);
+}
+
+input,select,textarea{
+  width:260px;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  margin-bottom:12px;
+}
+
 footer{
-  background:#0b3c5d;
+  background:var(--primary);
   color:white;
   text-align:center;
   padding:15px;
+  margin-top:40px;
+}
+
+.back{
+  background:#ddd;
 }
 </style>
 </head>
@@ -60,83 +111,120 @@ footer{
 <body>
 
 <header>
-<h2>Eyüp Aygar Eğitim</h2>
+  <h1>Eyüp Aygar Eğitim</h1>
+  <nav>
+    <button onclick="changeLang()">TR / EN</button>
+  </nav>
 </header>
 
 <!-- ANA SAYFA -->
-<section id="home" class="hero">
-<h1>Geleceğin Eğitimi Burada</h1>
-<p>Öğretmen – Öğrenci iş birliği platformu</p>
-<button class="teacher" onclick="login('teacher')">Öğretmen Girişi</button>
-<button class="student" onclick="login('student')">Öğrenci Girişi</button>
+<section id="home" class="hero active">
+  <h2 id="t-title">Geleceğin Eğitimi Burada</h2>
+  <p id="t-desc">Öğretmen ve öğrenciler için ortak öğrenme platformu</p>
+  <button class="btn teacher" onclick="goLogin('teacher')" id="t-teacher">Öğretmen Girişi</button>
+  <button class="btn student" onclick="goLogin('student')" id="t-student">Öğrenci Girişi</button>
 </section>
 
-<!-- SAHTE GİRİŞ -->
-<section id="login" class="section">
-<h2>Giriş Yap</h2>
-<p>(Demo – şifre kontrolü yok)</p>
-<input type="text" placeholder="Kullanıcı Adı"><br>
-<input type="password" placeholder="Şifre"><br>
-<button onclick="enter()">Giriş</button>
+<!-- GİRİŞ -->
+<section id="login">
+  <h2 id="t-login">Giriş Yap</h2>
+  <p>(Demo – gerçek sistemde okul e-postası ile)</p>
+  <input type="text" placeholder="Kullanıcı Adı"><br>
+  <input type="password" placeholder="Şifre"><br>
+  <button class="btn teacher" onclick="enter()">Giriş</button>
 </section>
 
 <!-- PANEL -->
-<section id="panel" class="section">
-<h2 id="panelTitle"></h2>
+<section id="panel">
+  <h2 class="panel-title" id="panelTitle"></h2>
 
-<div class="cards">
-  <div class="card" onclick="openLesson('Matematik')">📘 Matematik</div>
-  <div class="card" onclick="openLesson('Fizik')">📗 Fizik</div>
-  <div class="card" onclick="openLesson('Kimya')">📙 Kimya</div>
-  <div class="card" onclick="openLesson('Biyoloji')">📕 Biyoloji</div>
-</div>
+  <div class="cards">
+    <div class="card" onclick="openLesson('Matematik')">📘 Matematik</div>
+    <div class="card" onclick="openLesson('Fizik')">📗 Fizik</div>
+    <div class="card" onclick="openLesson('Kimya')">📙 Kimya</div>
+    <div class="card" onclick="openLesson('Biyoloji')">📕 Biyoloji</div>
+  </div>
 </section>
 
-<!-- DERS İÇERİĞİ -->
-<section id="lesson" class="section">
-<h2 id="lessonTitle"></h2>
-<p>Bu derse ait örnek içerikler:</p>
-<ul>
-<li>Konu anlatım videoları</li>
-<li>PDF notlar</li>
-<li>Öğrenci paylaşımları</li>
-</ul>
-<button onclick="back()">Geri</button>
+<!-- DERS -->
+<section id="lesson">
+  <h2 id="lessonTitle"></h2>
+  <p>Bu derse ait içerikler:</p>
+  <ul>
+    <li>📹 Ders anlatım videoları</li>
+    <li>📄 PDF konu özetleri</li>
+    <li>📝 Öğrenci not paylaşımları</li>
+  </ul>
+  <button class="btn back" onclick="goBack()">Geri</button>
 </section>
 
-<footer>© 2026 Eyüp Aygar Eğitim</footer>
+<footer>
+© 2026 Eyüp Aygar Eğitim Platformu
+</footer>
 
 <script>
 let role="";
+let lang="tr";
 
-function hideAll(){
-  document.querySelectorAll(".section").forEach(s=>s.style.display="none");
-  document.getElementById("home").style.display="none";
+const translations={
+  tr:{
+    title:"Geleceğin Eğitimi Burada",
+    desc:"Öğretmen ve öğrenciler için ortak öğrenme platformu",
+    teacher:"Öğretmen Girişi",
+    student:"Öğrenci Girişi",
+    login:"Giriş Yap"
+  },
+  en:{
+    title:"Education of the Future",
+    desc:"A collaborative learning platform",
+    teacher:"Teacher Login",
+    student:"Student Login",
+    login:"Login"
+  }
+};
+
+function updateLang(){
+  document.getElementById("t-title").innerText=translations[lang].title;
+  document.getElementById("t-desc").innerText=translations[lang].desc;
+  document.getElementById("t-teacher").innerText=translations[lang].teacher;
+  document.getElementById("t-student").innerText=translations[lang].student;
+  document.getElementById("t-login").innerText=translations[lang].login;
 }
 
-function login(r){
+function changeLang(){
+  lang = lang==="tr" ? "en" : "tr";
+  updateLang();
+}
+
+function hideAll(){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+}
+
+function goLogin(r){
   role=r;
   hideAll();
-  document.getElementById("login").style.display="block";
+  document.getElementById("login").classList.add("active");
 }
 
 function enter(){
   hideAll();
-  document.getElementById("panel").style.display="block";
+  document.getElementById("panel").classList.add("active");
   document.getElementById("panelTitle").innerText=
     role==="teacher" ? "Öğretmen Paneli" : "Öğrenci Paneli";
 }
 
 function openLesson(name){
   hideAll();
-  document.getElementById("lesson").style.display="block";
-  document.getElementById("lessonTitle").innerText=name+" Dersi";
+  document.getElementById("lesson").classList.add("active");
+  document.getElementById("lessonTitle").innerText=name;
 }
 
-function back(){
+function goBack(){
   hideAll();
-  document.getElementById("panel").style.display="block";
+  document.getElementById("panel").classList.add("active");
 }
+
+updateLang();
 </script>
 
 </body>
