@@ -1,0 +1,16 @@
+{
+  "name": "Eyüp Aygar Eğitim Platformu",
+  "short_name": "EyüpAygarEdu",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b3c5d",
+  "theme_color": "#0b3c5d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135768.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
