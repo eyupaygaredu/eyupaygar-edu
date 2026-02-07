@@ -2,175 +2,86 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Eyüp Aygar Eğitim Platformu</title>
+<title>Eyüp Aygar Eğitim</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- 🔹 TASARIM -->
 <style>
-body{
-  margin:0;
-  font-family:Segoe UI, Arial, sans-serif;
-  background:#f4f6f8;
-  text-align:center;
-}
-
-header{
-  background:#0b3c5d;
-  color:white;
-  padding:20px;
-  font-size:22px;
-}
-
-.container{
-  margin-top:40px;
-}
-
-.card{
-  background:white;
-  width:320px;
-  margin:20px auto;
-  padding:25px;
-  border-radius:15px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.15);
-}
-
-input, select{
-  width:90%;
-  padding:10px;
-  margin:8px 0;
-}
-
-button{
-  width:95%;
-  padding:12px;
-  border:none;
-  border-radius:20px;
-  background:#1e88e5;
-  color:white;
-  cursor:pointer;
-  font-size:15px;
-}
-
-button:hover{
-  background:#1565c0;
-}
-
-.hidden{
-  display:none;
-}
-
-#message{
-  font-weight:bold;
-  margin-top:15px;
-}
+body{font-family:Arial;background:#f4f6f8;margin:0}
+header{background:#0b3c5d;color:white;padding:15px;text-align:center}
+section{display:none;padding:30px}
+.active{display:block}
+input,button{padding:10px;margin:8px 0;width:100%}
+button{background:#1e88e5;color:white;border:none;border-radius:6px}
+.card{background:white;padding:20px;margin:10px;border-radius:10px}
 </style>
-
-<!-- 🔹 FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 </head>
 
 <body>
 
 <header>Eyüp Aygar Eğitim Platformu</header>
 
-<div class="container">
+<section id="auth" class="active">
+<h2>Kayıt / Giriş</h2>
+<input id="email" type="email" placeholder="Okul E-postası">
+<input id="password" type="password" placeholder="Şifre">
+<button onclick="register()">Kayıt Ol</button>
+<button onclick="login()">Giriş Yap</button>
+<p id="msg"></p>
+</section>
 
-  <!-- 🔐 KAYIT -->
-  <div class="card" id="registerBox">
-    <h2>Kayıt Ol</h2>
-    <input id="regEmail" type="email" placeholder="E-posta">
-    <input id="regPassword" type="password" placeholder="Şifre">
-    <select id="regRole">
-      <option value="student">Öğrenci</option>
-      <option value="teacher">Öğretmen</option>
-    </select>
-    <button onclick="register()">Kayıt Ol</button>
-  </div>
+<section id="panel">
+<h2>Öğrenci Paneli</h2>
+<div class="card">📘 Matematik</div>
+<div class="card">📗 Fizik</div>
+<div class="card">📕 Biyoloji</div>
+<button onclick="logout()">Çıkış</button>
+</section>
 
-  <!-- 🔓 GİRİŞ -->
-  <div class="card" id="loginBox">
-    <h2>Giriş Yap</h2>
-    <input id="logEmail" type="email" placeholder="E-posta">
-    <input id="logPassword" type="password" placeholder="Şifre">
-    <button onclick="login()">Giriş Yap</button>
-  </div>
+<!-- 🔥 FIREBASE CDN -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  <!-- 🎓 PANEL -->
-  <div class="card hidden" id="panel">
-    <h2 id="panelTitle"></h2>
-    <p>Başarıyla giriş yaptın 🎉</p>
-    <button onclick="logout()">Çıkış Yap</button>
-  </div>
-
-  <p id="message"></p>
-</div>
-
-<!-- 🔹 JAVASCRIPT -->
-<script>
-/* 🔥 FIREBASE AYARLARI – BURAYI KENDİ PROJENDEN DOLDUR */
 const firebaseConfig = {
-  apiKey: "BURAYA",
-  authDomain: "BURAYA",
-  projectId: "BURAYA",
-  appId: "BURAYA"
+  apiKey: "AIzaSyDtooyW8XEhkw0WhqqTLnPp7OuKjRLvH64",
+  authDomain: "eyup-aygar-egitim.firebaseapp.com",
+  projectId: "eyup-aygar-egitim",
+  storageBucket: "eyup-aygar-egitim.firebasestorage.app",
+  messagingSenderId: "838780383490",
+  appId: "1:838780383490:web:8969dd15480fcfa129121b"
 };
 
-// Firebase başlat
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-const message = document.getElementById("message");
+window.register = () => {
+  createUserWithEmailAndPassword(auth,
+    email.value,
+    password.value
+  ).then(()=>msg.innerText="Kayıt başarılı")
+  .catch(e=>msg.innerText=e.message);
+};
 
-// KAYIT
-function register(){
-  const email = regEmail.value;
-  const password = regPassword.value;
-  const role = regRole.value;
+window.login = () => {
+  signInWithEmailAndPassword(auth,
+    email.value,
+    password.value
+  ).catch(()=>msg.innerText="Hatalı giriş");
+};
 
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(() => {
-      message.innerText = "✅ Kayıt başarılı!";
-      message.style.color = "green";
-      localStorage.setItem("role", role);
-    })
-    .catch(err => {
-      message.innerText = "❌ " + err.message;
-      message.style.color = "red";
-    });
-}
+window.logout = () => signOut(auth);
 
-// GİRİŞ
-function login(){
-  const email = logEmail.value;
-  const password = logPassword.value;
-
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      showPanel();
-    })
-    .catch(err => {
-      message.innerText = "❌ " + err.message;
-      message.style.color = "red";
-    });
-}
-
-// PANEL
-function showPanel(){
-  registerBox.classList.add("hidden");
-  loginBox.classList.add("hidden");
-  panel.classList.remove("hidden");
-
-  const role = localStorage.getItem("role");
-  panelTitle.innerText =
-    role === "teacher" ? "👩‍🏫 Öğretmen Paneli" : "👨‍🎓 Öğrenci Paneli";
-}
-
-// ÇIKIŞ
-function logout(){
-  auth.signOut().then(() => location.reload());
-}
+onAuthStateChanged(auth,user=>{
+  if(user){
+    auth.classList.remove("active");
+    panel.classList.add("active");
+  }else{
+    panel.classList.remove("active");
+    auth.classList.add("active");
+  }
+});
 </script>
 
 </body>
 </html>
-
