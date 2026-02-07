@@ -2,183 +2,175 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Eyüp Aygar Eğitim Platformu</title>
 
+<!-- 🔹 TASARIM -->
 <style>
-:root{
-  --primary:#0b3c5d;
-  --secondary:#1e88e5;
-  --bg:#f4f6f8;
-}
 body{
   margin:0;
-  font-family:"Segoe UI", Arial, sans-serif;
-  background:var(--bg);
+  font-family:Segoe UI, Arial, sans-serif;
+  background:#f4f6f8;
+  text-align:center;
 }
+
 header{
-  background:var(--primary);
+  background:#0b3c5d;
   color:white;
-  padding:15px 40px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  padding:20px;
+  font-size:22px;
 }
-nav button{
-  margin-left:10px;
-  background:white;
-  color:var(--primary);
-  border:none;
-  padding:8px 16px;
-  border-radius:20px;
-  cursor:pointer;
+
+.container{
+  margin-top:40px;
 }
-section{display:none;padding:50px;}
-.active{display:block;}
-.hero{text-align:center;}
-.btn{
-  padding:12px 24px;
-  border:none;
-  border-radius:25px;
-  cursor:pointer;
-  margin:10px;
-}
-.teacher{background:var(--primary);color:white;}
-.student{background:var(--secondary);color:white;}
-.cards{display:flex;gap:20px;flex-wrap:wrap;}
+
 .card{
   background:white;
-  width:220px;
-  padding:20px;
+  width:320px;
+  margin:20px auto;
+  padding:25px;
   border-radius:15px;
-  box-shadow:0 4px 10px rgba(0,0,0,.1);
-  cursor:pointer;
+  box-shadow:0 5px 15px rgba(0,0,0,0.15);
 }
-input,select{
-  width:260px;
+
+input, select{
+  width:90%;
   padding:10px;
-  margin-bottom:12px;
+  margin:8px 0;
 }
-footer{
-  background:var(--primary);
+
+button{
+  width:95%;
+  padding:12px;
+  border:none;
+  border-radius:20px;
+  background:#1e88e5;
   color:white;
-  text-align:center;
-  padding:15px;
+  cursor:pointer;
+  font-size:15px;
+}
+
+button:hover{
+  background:#1565c0;
+}
+
+.hidden{
+  display:none;
+}
+
+#message{
+  font-weight:bold;
+  margin-top:15px;
 }
 </style>
+
+<!-- 🔹 FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 </head>
 
 <body>
 
-<header>
-  <h2>Eyüp Aygar Eğitim</h2>
-  <nav>
-    <button onclick="goHome()">Ana Sayfa</button>
-    <button onclick="logout()">Çıkış</button>
-  </nav>
-</header>
+<header>Eyüp Aygar Eğitim Platformu</header>
 
-<section id="home" class="hero active">
-  <h1>Geleceğin Eğitimi Burada</h1>
-  <p>Gerçek kullanıcılarla çalışan okul platformu</p>
-  <button class="btn teacher" onclick="showLogin()">Giriş Yap</button>
-  <button class="btn student" onclick="showRegister()">Kayıt Ol</button>
-</section>
+<div class="container">
 
-<section id="login">
-  <h2>Giriş Yap</h2>
-  <input id="loginEmail" type="email" placeholder="Okul E-postası">
-  <input id="loginPassword" type="password" placeholder="Şifre">
-  <button class="btn teacher" onclick="login()">Giriş</button>
-</section>
-
-<section id="register">
-  <h2>Kayıt Ol</h2>
-  <input id="regEmail" type="email" placeholder="Okul E-postası">
-  <input id="regPassword" type="password" placeholder="Şifre">
-  <select id="role">
-    <option value="student">Öğrenci</option>
-    <option value="teacher">Öğretmen</option>
-  </select>
-  <button class="btn student" onclick="register()">Kayıt Ol</button>
-</section>
-
-<section id="panel">
-  <h2 id="panelTitle"></h2>
-  <p id="userMail"></p>
-  <div class="cards" id="lessonCards"></div>
-
-  <div id="teacherPanel" style="display:none;">
-    <h3>Ders Ekle</h3>
-    <input id="newLesson" placeholder="Ders adı">
-    <button class="btn teacher" onclick="addLesson()">Ekle</button>
+  <!-- 🔐 KAYIT -->
+  <div class="card" id="registerBox">
+    <h2>Kayıt Ol</h2>
+    <input id="regEmail" type="email" placeholder="E-posta">
+    <input id="regPassword" type="password" placeholder="Şifre">
+    <select id="regRole">
+      <option value="student">Öğrenci</option>
+      <option value="teacher">Öğretmen</option>
+    </select>
+    <button onclick="register()">Kayıt Ol</button>
   </div>
-</section>
 
-<footer>
-© 2026 Eyüp Aygar Eğitim Platformu – gençBİZ
-</footer>
+  <!-- 🔓 GİRİŞ -->
+  <div class="card" id="loginBox">
+    <h2>Giriş Yap</h2>
+    <input id="logEmail" type="email" placeholder="E-posta">
+    <input id="logPassword" type="password" placeholder="Şifre">
+    <button onclick="login()">Giriş Yap</button>
+  </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  <!-- 🎓 PANEL -->
+  <div class="card hidden" id="panel">
+    <h2 id="panelTitle"></h2>
+    <p>Başarıyla giriş yaptın 🎉</p>
+    <button onclick="logout()">Çıkış Yap</button>
+  </div>
 
+  <p id="message"></p>
+</div>
+
+<!-- 🔹 JAVASCRIPT -->
+<script>
+/* 🔥 FIREBASE AYARLARI – BURAYI KENDİ PROJENDEN DOLDUR */
 const firebaseConfig = {
-  apiKey: "AIzaSyAhx8N6VQrgejJyjvsxqbArDrDEpkG8Og0",
-  authDomain: "eyup-aygar-egitim.firebaseapp.com",
-  projectId: "eyup-aygar-egitim",
-  storageBucket: "eyup-aygar-egitim.firebasestorage.app",
-  messagingSenderId: "838780383490",
-  appId: "1:838780383490:web:0a70080d59d7ba9529121b"
+  apiKey: "BURAYA",
+  authDomain: "BURAYA",
+  projectId: "BURAYA",
+  appId: "BURAYA"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+// Firebase başlat
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-window.hideAll = () => document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-window.goHome = () => { hideAll(); home.classList.add("active"); }
-window.showLogin = () => { hideAll(); login.classList.add("active"); }
-window.showRegister = () => { hideAll(); register.classList.add("active"); }
+const message = document.getElementById("message");
 
-window.register = async () => {
+// KAYIT
+function register(){
   const email = regEmail.value;
-  const pass = regPassword.value;
-  const role = document.getElementById("role").value;
-  const cred = await createUserWithEmailAndPassword(auth,email,pass);
-  await setDoc(doc(db,"users",cred.user.uid),{email,role});
-};
+  const password = regPassword.value;
+  const role = regRole.value;
 
-window.login = async () => {
-  await signInWithEmailAndPassword(auth,loginEmail.value,loginPassword.value);
-};
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      message.innerText = "✅ Kayıt başarılı!";
+      message.style.color = "green";
+      localStorage.setItem("role", role);
+    })
+    .catch(err => {
+      message.innerText = "❌ " + err.message;
+      message.style.color = "red";
+    });
+}
 
-window.logout = () => signOut(auth);
+// GİRİŞ
+function login(){
+  const email = logEmail.value;
+  const password = logPassword.value;
 
-onAuthStateChanged(auth, async user=>{
-  if(!user){ goHome(); return; }
-  hideAll(); panel.classList.add("active");
-  userMail.innerText = user.email;
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      showPanel();
+    })
+    .catch(err => {
+      message.innerText = "❌ " + err.message;
+      message.style.color = "red";
+    });
+}
 
-  const snap = await getDoc(doc(db,"users",user.uid));
-  const role = snap.data().role;
+// PANEL
+function showPanel(){
+  registerBox.classList.add("hidden");
+  loginBox.classList.add("hidden");
+  panel.classList.remove("hidden");
 
-  panelTitle.innerText = role==="teacher" ? "Öğretmen Paneli" : "Öğrenci Paneli";
-  teacherPanel.style.display = role==="teacher" ? "block":"none";
+  const role = localStorage.getItem("role");
+  panelTitle.innerText =
+    role === "teacher" ? "👩‍🏫 Öğretmen Paneli" : "👨‍🎓 Öğrenci Paneli";
+}
 
-  lessonCards.innerHTML="";
-  const q = await getDocs(collection(db,"lessons"));
-  q.forEach(d=> lessonCards.innerHTML+=`<div class="card">📘 ${d.data().name}</div>`);
-});
-
-window.addLesson = async ()=>{
-  await addDoc(collection(db,"lessons"),{name:newLesson.value});
-  location.reload();
-};
+// ÇIKIŞ
+function logout(){
+  auth.signOut().then(() => location.reload());
+}
 </script>
 
 </body>
 </html>
+
