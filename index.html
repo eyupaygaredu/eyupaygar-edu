@@ -1,87 +1,32 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>Eyüp Aygar Eğitim</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{font-family:Arial;background:#f4f6f8;margin:0}
-header{background:#0b3c5d;color:white;padding:15px;text-align:center}
-section{display:none;padding:30px}
-.active{display:block}
-input,button{padding:10px;margin:8px 0;width:100%}
-button{background:#1e88e5;color:white;border:none;border-radius:6px}
-.card{background:white;padding:20px;margin:10px;border-radius:10px}
-</style>
+  <meta charset="UTF-8">
+  <title>Eyüp Aygar Eğitim</title>
 </head>
-
 <body>
 
-<header>Eyüp Aygar Eğitim Platformu</header>
+  <h1>Eyüp Aygar Eğitim Platformu</h1>
 
-<section id="auth" class="active">
-<h2>Kayıt / Giriş</h2>
-<input id="email" type="email" placeholder="Okul E-postası">
-<input id="password" type="password" placeholder="Şifre">
-<button onclick="register()">Kayıt Ol</button>
-<button onclick="login()">Giriş Yap</button>
-<p id="msg"></p>
-</section>
+  <h2>Kayıt Ol</h2>
+  <input type="email" id="email" placeholder="Okul maili">
+  <br><br>
+  <input type="password" id="password" placeholder="Şifre">
+  <br><br>
+  <button onclick="register()">Kayıt Ol</button>
 
-<section id="panel">
-<h2>Öğrenci Paneli</h2>
-<div class="card">📘 Matematik</div>
-<div class="card">📗 Fizik</div>
-<div class="card">📕 Biyoloji</div>
-<button onclick="logout()">Çıkış</button>
-</section>
+  <hr>
 
-<!-- 🔥 FIREBASE CDN -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged }
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  <h2>Giriş Yap</h2>
+  <input type="email" id="loginEmail" placeholder="Okul maili">
+  <br><br>
+  <input type="password" id="loginPassword" placeholder="Şifre">
+  <br><br>
+  <button onclick="login()">Giriş Yap</button>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDtooyW8XEhkw0WhqqTLnPp7OuKjRLvH64",
-  authDomain: "eyup-aygar-egitim.firebaseapp.com",
-  projectId: "eyup-aygar-egitim",
-  storageBucket: "eyup-aygar-egitim.firebasestorage.app",
-  messagingSenderId: "838780383490",
-  appId: "1:838780383490:web:8969dd15480fcfa129121b"
-};
+  <p id="error" style="color:red;"></p>
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-window.register = () => {
-  createUserWithEmailAndPassword(auth,
-    email.value,
-    password.value
-  ).then(()=>msg.innerText="Kayıt başarılı")
-  .catch(e=>msg.innerText=e.message);
-};
-
-window.login = () => {
-  signInWithEmailAndPassword(auth,
-    email.value,
-    password.value
-  ).catch(()=>msg.innerText="Hatalı giriş");
-};
-
-window.logout = () => signOut(auth);
-
-onAuthStateChanged(auth,user=>{
-  if(user){
-    auth.classList.remove("active");
-    panel.classList.add("active");
-  }else{
-    panel.classList.remove("active");
-    auth.classList.add("active");
-  }
-});
-</script>
-
+  <!-- Firebase kodları -->
+  <script type="module" src="index.js"></script>
 </body>
 </html>
