@@ -32,9 +32,8 @@ nav button{
   padding:8px 16px;
   border-radius:20px;
   cursor:pointer;
-  font-weight:600;
 }
-section{display:none;padding:60px 40px;}
+section{display:none;padding:50px;}
 .active{display:block;}
 .hero{text-align:center;}
 .btn{
@@ -46,22 +45,25 @@ section{display:none;padding:60px 40px;}
 }
 .teacher{background:var(--primary);color:white;}
 .student{background:var(--secondary);color:white;}
-input{
-  width:260px;
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  margin-bottom:12px;
-  display:block;
-}
 .cards{display:flex;gap:20px;flex-wrap:wrap;}
 .card{
   background:white;
+  width:220px;
   padding:20px;
-  width:200px;
-  border-radius:16px;
-  box-shadow:0 6px 15px rgba(0,0,0,0.1);
+  border-radius:15px;
+  box-shadow:0 4px 10px rgba(0,0,0,.1);
   cursor:pointer;
+}
+input,select{
+  width:260px;
+  padding:10px;
+  margin-bottom:12px;
+}
+footer{
+  background:var(--primary);
+  color:white;
+  text-align:center;
+  padding:15px;
 }
 </style>
 </head>
@@ -77,70 +79,106 @@ input{
 </header>
 
 <section id="home" class="hero active">
-  <h2>Geleceğin Eğitimi Burada</h2>
-  <button class="btn teacher" onclick="showLogin()">Giriş / Kayıt</button>
+  <h1>Geleceğin Eğitimi Burada</h1>
+  <p>Gerçek kullanıcılarla çalışan okul platformu</p>
+  <button class="btn teacher" onclick="showLogin()">Giriş Yap</button>
+  <button class="btn student" onclick="showRegister()">Kayıt Ol</button>
 </section>
 
 <section id="login">
-  <h2>Giriş / Kayıt</h2>
-  <input id="email" type="email" placeholder="E-posta">
-  <input id="password" type="password" placeholder="Şifre (en az 6)">
-  <button class="btn teacher" onclick="login()">Giriş Yap</button>
+  <h2>Giriş Yap</h2>
+  <input id="loginEmail" type="email" placeholder="Okul E-postası">
+  <input id="loginPassword" type="password" placeholder="Şifre">
+  <button class="btn teacher" onclick="login()">Giriş</button>
+</section>
+
+<section id="register">
+  <h2>Kayıt Ol</h2>
+  <input id="regEmail" type="email" placeholder="Okul E-postası">
+  <input id="regPassword" type="password" placeholder="Şifre">
+  <select id="role">
+    <option value="student">Öğrenci</option>
+    <option value="teacher">Öğretmen</option>
+  </select>
   <button class="btn student" onclick="register()">Kayıt Ol</button>
 </section>
 
 <section id="panel">
-  <h2>Öğrenci Paneli</h2>
-  <div class="cards">
-    <div class="card">📘 Matematik</div>
-    <div class="card">📗 Fizik</div>
-    <div class="card">📙 Kimya</div>
-    <div class="card">📕 Biyoloji</div>
+  <h2 id="panelTitle"></h2>
+  <p id="userMail"></p>
+  <div class="cards" id="lessonCards"></div>
+
+  <div id="teacherPanel" style="display:none;">
+    <h3>Ders Ekle</h3>
+    <input id="newLesson" placeholder="Ders adı">
+    <button class="btn teacher" onclick="addLesson()">Ekle</button>
   </div>
 </section>
 
+<footer>
+© 2026 Eyüp Aygar Eğitim Platformu – gençBİZ
+</footer>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } 
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "BURAYA",
-  authDomain: "BURAYA",
-  projectId: "BURAYA",
-  appId: "BURAYA"
+  apiKey: "AIzaSyAhx8N6VQrgejJyjvsxqbArDrDEpkG8Og0",
+  authDomain: "eyup-aygar-egitim.firebaseapp.com",
+  projectId: "eyup-aygar-egitim",
+  storageBucket: "eyup-aygar-egitim.firebasestorage.app",
+  messagingSenderId: "838780383490",
+  appId: "1:838780383490:web:0a70080d59d7ba9529121b"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-window.register = function(){
-  createUserWithEmailAndPassword(auth,
-    email.value, password.value)
-    .then(()=>{alert("Kayıt başarılı"); showPanel();})
-    .catch(e=>alert(e.message));
-}
+window.hideAll = () => document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+window.goHome = () => { hideAll(); home.classList.add("active"); }
+window.showLogin = () => { hideAll(); login.classList.add("active"); }
+window.showRegister = () => { hideAll(); register.classList.add("active"); }
 
-window.login = function(){
-  signInWithEmailAndPassword(auth,
-    email.value, password.value)
-    .then(()=>showPanel())
-    .catch(e=>alert(e.message));
-}
+window.register = async () => {
+  const email = regEmail.value;
+  const pass = regPassword.value;
+  const role = document.getElementById("role").value;
+  const cred = await createUserWithEmailAndPassword(auth,email,pass);
+  await setDoc(doc(db,"users",cred.user.uid),{email,role});
+};
 
-window.logout = function(){
-  signOut(auth).then(()=>goHome());
-}
+window.login = async () => {
+  await signInWithEmailAndPassword(auth,loginEmail.value,loginPassword.value);
+};
 
-function hideAll(){
-  document.querySelectorAll("section")
-  .forEach(s=>s.classList.remove("active"));
-}
-window.goHome=()=>{hideAll();home.classList.add("active");}
-window.showLogin=()=>{hideAll();login.classList.add("active");}
-window.showPanel=()=>{hideAll();panel.classList.add("active");}
+window.logout = () => signOut(auth);
+
+onAuthStateChanged(auth, async user=>{
+  if(!user){ goHome(); return; }
+  hideAll(); panel.classList.add("active");
+  userMail.innerText = user.email;
+
+  const snap = await getDoc(doc(db,"users",user.uid));
+  const role = snap.data().role;
+
+  panelTitle.innerText = role==="teacher" ? "Öğretmen Paneli" : "Öğrenci Paneli";
+  teacherPanel.style.display = role==="teacher" ? "block":"none";
+
+  lessonCards.innerHTML="";
+  const q = await getDocs(collection(db,"lessons"));
+  q.forEach(d=> lessonCards.innerHTML+=`<div class="card">📘 ${d.data().name}</div>`);
+});
+
+window.addLesson = async ()=>{
+  await addDoc(collection(db,"lessons"),{name:newLesson.value});
+  location.reload();
+};
 </script>
 
 </body>
 </html>
-
